@@ -5,12 +5,11 @@ import (
 	"go/ast"
 )
 
-// errorGer ...
 type errorGer struct {
 	err error
 }
 
-// ErrorGer ...
+// ErrorGer goastcher maker of error
 func ErrorGer(err error) Goastcher {
 	return &errorGer{err: err}
 }
@@ -32,7 +31,7 @@ func (g *errorGer) Bind(id string) Goastcher {
 	return g
 }
 
-// IsError ...
+// IsError return true if the given goastcher is ErrorGer
 func IsError(g Goastcher) bool {
 	return isErrorGer(g)
 }

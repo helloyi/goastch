@@ -14,117 +14,64 @@ type (
 		id   string
 	}
 
-	// ArrayType ...
-	arrayType struct{ node }
-	// AssignStmt ...
-	assignStmt struct{ node }
-	// BadDecl ...
-	badDecl struct{ node }
-	// BadExpr ...
-	badExpr struct{ node }
-	// BadStmt ...
-	badStmt struct{ node }
-	// BasicLit ...
-	basicLit struct{ node }
-	// BinaryExpr ...
-	binaryExpr struct{ node }
-	// BlockStmt ...
-	blockStmt struct{ node }
-	// BranchStmt ...
-	branchStmt struct{ node }
-	// CallExpr ...
-	callExpr struct{ node }
-	// CaseClause ...
-	caseClause struct{ node }
-	// ChanType ...
-	chanType struct{ node }
-	// CommClause ...
-	commClause struct{ node }
-	// Comment ...
-	comment struct{ node }
-	// CommentGroup ...
-	commentGroup struct{ node }
-	// CompositeLit ...
-	compositeLit struct{ node }
-	// DeclStmt ...
-	declStmt struct{ node }
-	// DeferStmt ...
-	deferStmt struct{ node }
-	// Ellipsis ...
-	ellipsis struct{ node }
-	// EmptyStmt ...
-	emptyStmt struct{ node }
-	// ExprStmt ...
-	exprStmt struct{ node }
-	// Field ...
-	field struct{ node }
-	// FieldList ...
-	fieldList struct{ node }
-	// File ...
-	file struct{ node }
-	// ForStmt ...
-	forStmt struct{ node }
-	// FuncDecl ...
-	funcDecl struct{ node }
-	// FuncLit ...
-	funcLit struct{ node }
-	// FuncType ...
-	funcType struct{ node }
-	// GenDecl ...
-	genDecl struct{ node }
-	// GoStmt ...
-	goStmt struct{ node }
-	// Ident ...
-	ident struct{ node }
-	// IfStmt ...
-	ifStmt struct{ node }
-	// ImportSpec ...
-	importSpec struct{ node }
-	// IncDecStmt ...
-	incDecStmt struct{ node }
-	// IndexExpr ...
-	indexExpr struct{ node }
-	// InterfaceType ...
-	interfaceType struct{ node }
-	// KeyValueExpr ...
-	keyValueExpr struct{ node }
-	// LabeledStmt ...
-	labeledStmt struct{ node }
-	// MapType ...
-	mapType struct{ node }
-	// pkg ...
-	pkg struct{ node }
-	// ParenExpr ...
-	parenExpr struct{ node }
-	// RangeStmt ...
-	rangeStmt struct{ node }
-	// ReturnStmt ...
-	returnStmt struct{ node }
-	// SelectStmt ...
-	selectStmt struct{ node }
-	// SelectorExpr ...
-	selectorExpr struct{ node }
-	// SendStmt ...
-	sendStmt struct{ node }
-	// SliceExpr ...
-	sliceExpr struct{ node }
-	// StarExpr ...
-	starExpr struct{ node }
-	// StructType ...
-	structType struct{ node }
-	// SwitchStmt ...
-	switchStmt struct{ node }
-	// TypeAssertExpr ...
+	// purebred node matchers
+	arrayType      struct{ node }
+	assignStmt     struct{ node }
+	badDecl        struct{ node }
+	badExpr        struct{ node }
+	badStmt        struct{ node }
+	basicLit       struct{ node }
+	binaryExpr     struct{ node }
+	blockStmt      struct{ node }
+	branchStmt     struct{ node }
+	callExpr       struct{ node }
+	caseClause     struct{ node }
+	chanType       struct{ node }
+	commClause     struct{ node }
+	comment        struct{ node }
+	commentGroup   struct{ node }
+	compositeLit   struct{ node }
+	declStmt       struct{ node }
+	deferStmt      struct{ node }
+	ellipsis       struct{ node }
+	emptyStmt      struct{ node }
+	exprStmt       struct{ node }
+	field          struct{ node }
+	fieldList      struct{ node }
+	file           struct{ node }
+	forStmt        struct{ node }
+	funcDecl       struct{ node }
+	funcLit        struct{ node }
+	funcType       struct{ node }
+	genDecl        struct{ node }
+	goStmt         struct{ node }
+	ident          struct{ node }
+	ifStmt         struct{ node }
+	importSpec     struct{ node }
+	incDecStmt     struct{ node }
+	indexExpr      struct{ node }
+	interfaceType  struct{ node }
+	keyValueExpr   struct{ node }
+	labeledStmt    struct{ node }
+	mapType        struct{ node }
+	pkg            struct{ node }
+	parenExpr      struct{ node }
+	rangeStmt      struct{ node }
+	returnStmt     struct{ node }
+	selectStmt     struct{ node }
+	selectorExpr   struct{ node }
+	sendStmt       struct{ node }
+	sliceExpr      struct{ node }
+	starExpr       struct{ node }
+	structType     struct{ node }
+	switchStmt     struct{ node }
 	typeAssertExpr struct{ node }
-	// TypeSpec ...
-	typeSpec struct{ node }
-	// TypeSwitchStmt ...
+	typeSpec       struct{ node }
 	typeSwitchStmt struct{ node }
-	// UnaryExpr ...
-	unaryExpr struct{ node }
-	// ValueSpec ...
-	valueSpec struct{ node }
+	unaryExpr      struct{ node }
+	valueSpec      struct{ node }
 
+	// varietal node matchers
 	shortVarDecl   struct{ node }
 	sliceType      struct{ node }
 	intBasicLit    struct{ node }
@@ -134,7 +81,7 @@ type (
 	stringBasicLit struct{ node }
 )
 
-// StringBasicLit ...
+// StringBasicLit matches string literals
 func StringBasicLit(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -167,7 +114,7 @@ func (g *stringBasicLit) String() string {
 	return fmt.Sprintf("stringBasicLit %s", g.next)
 }
 
-// CharBasicLit ...
+// CharBasicLit matches char literals
 func CharBasicLit(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -200,7 +147,7 @@ func (g *charBasicLit) String() string {
 	return fmt.Sprintf("charBasicLit %s", g.next)
 }
 
-// ImagBasicLit ...
+// ImagBasicLit matches imag literals
 func ImagBasicLit(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -233,7 +180,7 @@ func (g *imagBasicLit) String() string {
 	return fmt.Sprintf("imagBasicLit %s", g.next)
 }
 
-// FloatBasicLit ...
+// FloatBasicLit matches float literals
 func FloatBasicLit(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -266,7 +213,7 @@ func (g *floatBasicLit) String() string {
 	return fmt.Sprintf("floatBasicLit %s", g.next)
 }
 
-// IntBasicLit ...
+// IntBasicLit matches int literals
 func IntBasicLit(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -299,7 +246,7 @@ func (g *intBasicLit) String() string {
 	return fmt.Sprintf("intBasicLit %s", g.next)
 }
 
-// SliceType ...
+// SliceType matches slice type node
 func SliceType(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -332,7 +279,7 @@ func (g *sliceType) String() string {
 	return fmt.Sprintf("sliceType %s", g.next)
 }
 
-// ShortVarDecl ...
+// ShortVarDecl matches short variable declare
 func ShortVarDecl(g Goastcher) Goastcher {
 	if _, is := g.(*errorGer); is {
 		return g
@@ -397,7 +344,11 @@ func (g *node) bind(id string, ger Goastcher) Goastcher {
 	return ger
 }
 
-// ArrayType ...
+// ArrayType matches array type node
+//
+// []Type
+// [N]Type
+// [...]Type
 func ArrayType(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -405,7 +356,7 @@ func ArrayType(next Goastcher) Goastcher {
 	return &arrayType{node: newNode(next)}
 }
 
-// AssignStmt ...
+// AssignStmt matches assignment/sort-variable-declaration node
 func AssignStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -413,7 +364,7 @@ func AssignStmt(next Goastcher) Goastcher {
 	return &assignStmt{node: newNode(next)}
 }
 
-// BadDecl ...
+// BadDecl matches bad declaration node
 func BadDecl(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -421,7 +372,7 @@ func BadDecl(next Goastcher) Goastcher {
 	return &badDecl{node: newNode(next)}
 }
 
-// BadExpr ...
+// BadExpr matches bad expression node
 func BadExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -429,7 +380,7 @@ func BadExpr(next Goastcher) Goastcher {
 	return &badExpr{node: newNode(next)}
 }
 
-// BadStmt ...
+// BadStmt matches bad statement node
 func BadStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -437,7 +388,7 @@ func BadStmt(next Goastcher) Goastcher {
 	return &badStmt{node: newNode(next)}
 }
 
-// BasicLit ...
+// BasicLit matches literals for basic type
 func BasicLit(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -445,7 +396,7 @@ func BasicLit(next Goastcher) Goastcher {
 	return &basicLit{node: newNode(next)}
 }
 
-// BinaryExpr ...
+// BinaryExpr matches binary expressions
 func BinaryExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -453,7 +404,7 @@ func BinaryExpr(next Goastcher) Goastcher {
 	return &binaryExpr{node: newNode(next)}
 }
 
-// BlockStmt ...
+// BlockStmt matches braced statement list
 func BlockStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -461,7 +412,7 @@ func BlockStmt(next Goastcher) Goastcher {
 	return &blockStmt{node: newNode(next)}
 }
 
-// BranchStmt ...
+// BranchStmt matches break, continue, goto, or fallthrough statement
 func BranchStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -469,7 +420,7 @@ func BranchStmt(next Goastcher) Goastcher {
 	return &branchStmt{node: newNode(next)}
 }
 
-// CallExpr ...
+// CallExpr matches expression followed by an argument list
 func CallExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -477,7 +428,7 @@ func CallExpr(next Goastcher) Goastcher {
 	return &callExpr{node: newNode(next)}
 }
 
-// CaseClause ...
+// CaseClause matches case of an expression or type switch statement
 func CaseClause(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -485,7 +436,7 @@ func CaseClause(next Goastcher) Goastcher {
 	return &caseClause{node: newNode(next)}
 }
 
-// ChanType ...
+// ChanType matches channel type
 func ChanType(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -493,7 +444,7 @@ func ChanType(next Goastcher) Goastcher {
 	return &chanType{node: newNode(next)}
 }
 
-// CommClause ...
+// CommClause matches case of a select statement
 func CommClause(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -501,7 +452,7 @@ func CommClause(next Goastcher) Goastcher {
 	return &commClause{node: newNode(next)}
 }
 
-// Comment ...
+// Comment matches single //-style or /*-style comment
 func Comment(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -509,7 +460,8 @@ func Comment(next Goastcher) Goastcher {
 	return &comment{node: newNode(next)}
 }
 
-// CommentGroup ...
+// CommentGroup matches sequence of comments with no other tokens and no empty
+// lines between
 func CommentGroup(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -517,7 +469,7 @@ func CommentGroup(next Goastcher) Goastcher {
 	return &commentGroup{node: newNode(next)}
 }
 
-// CompositeLit ...
+// CompositeLit matches composite literal
 func CompositeLit(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -525,7 +477,7 @@ func CompositeLit(next Goastcher) Goastcher {
 	return &compositeLit{node: newNode(next)}
 }
 
-// DeclStmt ...
+// DeclStmt matches declaration in a statement list
 func DeclStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -533,7 +485,7 @@ func DeclStmt(next Goastcher) Goastcher {
 	return &declStmt{node: newNode(next)}
 }
 
-// DeferStmt ...
+// DeferStmt matches defer statement
 func DeferStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -541,7 +493,8 @@ func DeferStmt(next Goastcher) Goastcher {
 	return &deferStmt{node: newNode(next)}
 }
 
-// Ellipsis ...
+// Ellipsis matches node for the "..." type in a parameter list or the "..."
+// length in an array type
 func Ellipsis(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -549,7 +502,7 @@ func Ellipsis(next Goastcher) Goastcher {
 	return &ellipsis{node: newNode(next)}
 }
 
-// EmptyStmt ...
+// EmptyStmt matches explicit or implicit semicolon
 func EmptyStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -557,7 +510,7 @@ func EmptyStmt(next Goastcher) Goastcher {
 	return &emptyStmt{node: newNode(next)}
 }
 
-// ExprStmt ...
+// ExprStmt matches stand-alone expression in a statement list
 func ExprStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -565,7 +518,8 @@ func ExprStmt(next Goastcher) Goastcher {
 	return &exprStmt{node: newNode(next)}
 }
 
-// Field  ...
+// Field matches field declaration list in a struct type, method list in an
+// interface type, or a parameter/result declaration in a signature
 func Field(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -573,7 +527,7 @@ func Field(next Goastcher) Goastcher {
 	return &field{node: newNode(next)}
 }
 
-// FieldList ...
+// FieldList matches fields list, enclosed by parentheses or braces
 func FieldList(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -581,7 +535,7 @@ func FieldList(next Goastcher) Goastcher {
 	return &fieldList{node: newNode(next)}
 }
 
-// File ...
+// File matches node that represents a Go source file
 func File(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -589,7 +543,7 @@ func File(next Goastcher) Goastcher {
 	return &file{node: newNode(next)}
 }
 
-// ForStmt ...
+// ForStmt matches for statement
 func ForStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -597,7 +551,7 @@ func ForStmt(next Goastcher) Goastcher {
 	return &forStmt{node: newNode(next)}
 }
 
-// FuncDecl ...
+// FuncDecl matches function declaration
 func FuncDecl(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -605,7 +559,7 @@ func FuncDecl(next Goastcher) Goastcher {
 	return &funcDecl{node: newNode(next)}
 }
 
-// FuncLit ...
+// FuncLit matches function literal
 func FuncLit(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -613,7 +567,7 @@ func FuncLit(next Goastcher) Goastcher {
 	return &funcLit{node: newNode(next)}
 }
 
-// FuncType ...
+// FuncType matches function type
 func FuncType(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -621,7 +575,7 @@ func FuncType(next Goastcher) Goastcher {
 	return &funcType{node: newNode(next)}
 }
 
-// GenDecl ...
+// GenDecl matches import, constant, type or variable declaration
 func GenDecl(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -629,7 +583,7 @@ func GenDecl(next Goastcher) Goastcher {
 	return &genDecl{node: newNode(next)}
 }
 
-// GoStmt ...
+// GoStmt matches go statement
 func GoStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -637,7 +591,7 @@ func GoStmt(next Goastcher) Goastcher {
 	return &goStmt{node: newNode(next)}
 }
 
-// Ident ...
+// Ident matches identifier
 func Ident(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -645,7 +599,7 @@ func Ident(next Goastcher) Goastcher {
 	return &ident{node: newNode(next)}
 }
 
-// IfStmt ...
+// IfStmt matches if stamtement
 func IfStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -653,7 +607,7 @@ func IfStmt(next Goastcher) Goastcher {
 	return &ifStmt{node: newNode(next)}
 }
 
-// ImportSpec ...
+// ImportSpec matches single package import specification
 func ImportSpec(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -661,7 +615,7 @@ func ImportSpec(next Goastcher) Goastcher {
 	return &importSpec{node: newNode(next)}
 }
 
-// IncDecStmt ...
+// IncDecStmt matches increment or decrement statement
 func IncDecStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -669,7 +623,7 @@ func IncDecStmt(next Goastcher) Goastcher {
 	return &incDecStmt{node: newNode(next)}
 }
 
-// IndexExpr ...
+// IndexExpr matches expression followed by an index
 func IndexExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -677,7 +631,7 @@ func IndexExpr(next Goastcher) Goastcher {
 	return &indexExpr{node: newNode(next)}
 }
 
-// InterfaceType ...
+// InterfaceType matches interface type
 func InterfaceType(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -685,7 +639,7 @@ func InterfaceType(next Goastcher) Goastcher {
 	return &interfaceType{node: newNode(next)}
 }
 
-// KeyValueExpr ...
+// KeyValueExpr matches (key : value) pairs in composite literals
 func KeyValueExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -693,7 +647,7 @@ func KeyValueExpr(next Goastcher) Goastcher {
 	return &keyValueExpr{node: newNode(next)}
 }
 
-// LabeledStmt ...
+// LabeledStmt matches labeled statement
 func LabeledStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -701,7 +655,7 @@ func LabeledStmt(next Goastcher) Goastcher {
 	return &labeledStmt{node: newNode(next)}
 }
 
-// MapType ...
+// MapType matches map type
 func MapType(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -709,7 +663,7 @@ func MapType(next Goastcher) Goastcher {
 	return &mapType{node: newNode(next)}
 }
 
-// Pkg ...
+// Pkg matches Go package
 func Pkg(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -717,7 +671,7 @@ func Pkg(next Goastcher) Goastcher {
 	return &pkg{node: newNode(next)}
 }
 
-// ParenExpr ...
+// ParenExpr matches parenthesized expression
 func ParenExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -725,7 +679,7 @@ func ParenExpr(next Goastcher) Goastcher {
 	return &parenExpr{node: newNode(next)}
 }
 
-// RangeStmt ...
+// RangeStmt matches for statement with a range clause
 func RangeStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -733,7 +687,7 @@ func RangeStmt(next Goastcher) Goastcher {
 	return &rangeStmt{node: newNode(next)}
 }
 
-// ReturnStmt ...
+// ReturnStmt matches return statement
 func ReturnStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -741,7 +695,7 @@ func ReturnStmt(next Goastcher) Goastcher {
 	return &returnStmt{node: newNode(next)}
 }
 
-// SelectStmt ...
+// SelectStmt matches select statement
 func SelectStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -749,7 +703,7 @@ func SelectStmt(next Goastcher) Goastcher {
 	return &selectStmt{node: newNode(next)}
 }
 
-// SelectorExpr ...
+// SelectorExpr matches expression followed by a selector
 func SelectorExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -757,7 +711,7 @@ func SelectorExpr(next Goastcher) Goastcher {
 	return &selectorExpr{node: newNode(next)}
 }
 
-// SendStmt ...
+// SendStmt matches send statement
 func SendStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -765,7 +719,7 @@ func SendStmt(next Goastcher) Goastcher {
 	return &sendStmt{node: newNode(next)}
 }
 
-// SliceExpr ...
+// SliceExpr matches expression followed by slice indices
 func SliceExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -773,7 +727,8 @@ func SliceExpr(next Goastcher) Goastcher {
 	return &sliceExpr{node: newNode(next)}
 }
 
-// StarExpr ...
+// StarExpr matches expression of the form "*" Expression. Semantically it could
+// be a unary "*" expression, or a pointer type
 func StarExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -781,7 +736,7 @@ func StarExpr(next Goastcher) Goastcher {
 	return &starExpr{node: newNode(next)}
 }
 
-// StructType ...
+// StructType matches struct type
 func StructType(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -789,7 +744,7 @@ func StructType(next Goastcher) Goastcher {
 	return &structType{node: newNode(next)}
 }
 
-// SwitchStmt ...
+// SwitchStmt matches switch statement
 func SwitchStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -797,7 +752,7 @@ func SwitchStmt(next Goastcher) Goastcher {
 	return &switchStmt{node: newNode(next)}
 }
 
-// TypeAssertExpr ...
+// TypeAssertExpr matches expression followed by a type assertion
 func TypeAssertExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -805,7 +760,7 @@ func TypeAssertExpr(next Goastcher) Goastcher {
 	return &typeAssertExpr{node: newNode(next)}
 }
 
-// TypeSpec ...
+// TypeSpec matches type declaration
 func TypeSpec(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -813,7 +768,7 @@ func TypeSpec(next Goastcher) Goastcher {
 	return &typeSpec{node: newNode(next)}
 }
 
-// TypeSwitchStmt ...
+// TypeSwitchStmt matches type switch statement
 func TypeSwitchStmt(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -821,7 +776,7 @@ func TypeSwitchStmt(next Goastcher) Goastcher {
 	return &typeSwitchStmt{node: newNode(next)}
 }
 
-// UnaryExpr ...
+// UnaryExpr unary expression. Unary "*" expressions are matched via StarExpr
 func UnaryExpr(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next
@@ -829,7 +784,7 @@ func UnaryExpr(next Goastcher) Goastcher {
 	return &unaryExpr{node: newNode(next)}
 }
 
-// ValueSpec ...
+// ValueSpec constant or variable declaration
 func ValueSpec(next Goastcher) Goastcher {
 	if isErrorGer(next) {
 		return next

@@ -46,13 +46,11 @@ type (
 		id  string
 	}
 
-	// hasRecvName func decl recv name
 	hasRecvName struct {
 		ger Goastcher
 		id  string
 	}
 
-	// hasRhs assignStmt has a rhs
 	hasRhs struct {
 		ger Goastcher
 		id  string
@@ -122,7 +120,7 @@ type (
 	// CommClause
 )
 
-// HasFun ...
+// HasFun matches Fun of CallExpr
 func HasFun(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -130,7 +128,6 @@ func HasFun(g Goastcher) Goastcher {
 	return &hasFun{ger: g}
 }
 
-// String ...
 func (g *hasFun) String() string {
 	return fmt.Sprintf("hasFun %s", g.ger)
 }
@@ -154,7 +151,7 @@ func (g *hasFun) Goastch(ctx *Context, node ast.Node) bool {
 	return false
 }
 
-// ForArgs ...
+// ForArgs matches all arguments
 func ForArgs(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -162,7 +159,6 @@ func ForArgs(g Goastcher) Goastcher {
 	return &forArgs{ger: g}
 }
 
-// String ...
 func (g *forArgs) String() string {
 	return fmt.Sprintf("forArgs %s", g.ger)
 }
@@ -193,7 +189,7 @@ func (g *forArgs) Goastch(ctx *Context, node ast.Node) bool {
 	return matched
 }
 
-// HasLabel ...
+// HasLabel matches Label of BranchStmt, LabeledStmt
 func HasLabel(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -201,7 +197,6 @@ func HasLabel(g Goastcher) Goastcher {
 	return &hasLabel{ger: g}
 }
 
-// String ...
 func (g *hasLabel) String() string {
 	return fmt.Sprintf("hasLabel %s", g.ger)
 }
@@ -230,7 +225,7 @@ func (g *hasLabel) Goastch(ctx *Context, node ast.Node) bool {
 	return true
 }
 
-// ForRHS ...
+// ForRHS matches all RHS expr of AssignStmt
 func ForRHS(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -238,7 +233,6 @@ func ForRHS(g Goastcher) Goastcher {
 	return &forRHS{ger: g}
 }
 
-// String ...
 func (g *forRHS) String() string {
 	return fmt.Sprintf("forRHS %s", g.ger)
 }
@@ -266,7 +260,7 @@ func (g *forRHS) Goastch(ctx *Context, node ast.Node) bool {
 	return matched
 }
 
-// ForLHS ...
+// ForLHS matches all LHS expr of AssignStmt
 func ForLHS(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -302,7 +296,7 @@ func (g *forLHS) Goastch(ctx *Context, node ast.Node) bool {
 	return matched
 }
 
-// HasElement ...
+// HasElement matches Elt node of ArrayType, Ellipsis
 func HasElement(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -310,7 +304,6 @@ func HasElement(g Goastcher) Goastcher {
 	return &hasElement{ger: g}
 }
 
-// String ...
 func (g *hasElement) String() string {
 	return fmt.Sprintf("hasElement %s", g.ger)
 }
@@ -339,7 +332,7 @@ func (g *hasElement) Goastch(ctx *Context, node ast.Node) bool {
 	return true
 }
 
-// HasLen ...
+// HasLen matches Len node of ArrayType
 func HasLen(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -347,7 +340,6 @@ func HasLen(g Goastcher) Goastcher {
 	return &hasLen{ger: g}
 }
 
-// String ...
 func (g *hasLen) String() string {
 	return fmt.Sprintf("hasLen %s", g.ger)
 }
@@ -374,7 +366,7 @@ func (g *hasLen) Goastch(ctx *Context, node ast.Node) bool {
 	return true
 }
 
-// HasDecl ...
+// HasDecl matches Decl node of DeclStmt
 func HasDecl(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -382,7 +374,6 @@ func HasDecl(g Goastcher) Goastcher {
 	return &hasDecl{ger: g}
 }
 
-// String ...
 func (g *hasDecl) String() string {
 	return fmt.Sprintf("hasDecl %s", g.ger)
 }
@@ -409,7 +400,7 @@ func (g *hasDecl) Goastch(ctx *Context, node ast.Node) bool {
 	return true
 }
 
-// HasCond ...
+// HasCond matches Cond node of ForStmt, IfStmt
 func HasCond(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -417,7 +408,6 @@ func HasCond(g Goastcher) Goastcher {
 	return &hasCond{ger: g}
 }
 
-// String ...
 func (g *hasCond) String() string {
 	return fmt.Sprintf("hasCond %s", g.ger)
 }
@@ -446,7 +436,8 @@ func (g *hasCond) Goastch(ctx *Context, node ast.Node) bool {
 	return true
 }
 
-// Last ...
+// Last matches last node of some List-Type nodes, eg. FieldList, BlockStmt,
+// CommentGroup
 func Last(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -454,7 +445,6 @@ func Last(g Goastcher) Goastcher {
 	return &last{ger: g}
 }
 
-// String ...
 func (g *last) String() string {
 	return fmt.Sprintf("last %s", g.ger)
 }
@@ -497,7 +487,7 @@ func (g *last) Bind(id string) Goastcher {
 	return g
 }
 
-// ForFields ...
+// ForFields matches all Fields of FieldList, StructType
 func ForFields(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -505,7 +495,6 @@ func ForFields(g Goastcher) Goastcher {
 	return &forFields{ger: g}
 }
 
-// String ...
 func (g *forFields) String() string {
 	return fmt.Sprintf("forFields %s", g.ger)
 }
@@ -539,7 +528,7 @@ func (g *forFields) Bind(id string) Goastcher {
 	return g
 }
 
-// HasType ...
+// HasType matches Type node
 func HasType(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -547,7 +536,6 @@ func HasType(g Goastcher) Goastcher {
 	return &hasType{ger: g}
 }
 
-// String ...
 func (g *hasType) String() string {
 	return fmt.Sprintf("hasType %s", g.ger)
 }
@@ -587,7 +575,7 @@ func (g *hasType) Bind(id string) Goastcher {
 	return g
 }
 
-// HasResults ...
+// HasResults matches Results node of FuncType
 func HasResults(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -595,7 +583,6 @@ func HasResults(g Goastcher) Goastcher {
 	return &hasResults{ger: g}
 }
 
-// String ...
 func (g *hasResults) String() string {
 	return fmt.Sprintf("hasResults %s", g.ger)
 }
@@ -628,7 +615,6 @@ func HasRhs(g Goastcher) Goastcher {
 	return &hasRhs{ger: g}
 }
 
-// String ...
 func (g *hasRhs) String() string {
 	return fmt.Sprintf("hasRhs %s", g.ger)
 }
@@ -657,7 +643,7 @@ func (g *hasRhs) Bind(id string) Goastcher {
 	return g
 }
 
-// HasRecvName ...
+// HasRecvName matches RecvName node of FuncDecl
 func HasRecvName(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -665,7 +651,6 @@ func HasRecvName(g Goastcher) Goastcher {
 	return &hasRecvName{ger: g}
 }
 
-// String ...
 func (g *hasRecvName) String() string {
 	return fmt.Sprintf("hasRecvName %s", g.ger)
 }
@@ -699,7 +684,7 @@ func (g *hasRecvName) Bind(id string) Goastcher {
 	return g
 }
 
-// ForDecls ...
+// ForDecls matches all Decls of File
 func ForDecls(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -707,7 +692,6 @@ func ForDecls(g Goastcher) Goastcher {
 	return &forDecls{ger: g}
 }
 
-// String ...
 func (g *forDecls) String() string {
 	return fmt.Sprintf("forDecls %s", g.ger)
 }
@@ -736,7 +720,7 @@ func (g *forDecls) Bind(id string) Goastcher {
 	return g
 }
 
-// ForSpecs ...
+// ForSpecs matches all Specs of GenDecl
 func ForSpecs(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -744,12 +728,10 @@ func ForSpecs(g Goastcher) Goastcher {
 	return &forSpecs{ger: g}
 }
 
-// String ...
 func (g *forSpecs) String() string {
 	return fmt.Sprintf("forSpecs %s", g.ger)
 }
 
-// Goastch ...
 func (g *forSpecs) Goastch(ctx *Context, node ast.Node) bool {
 	matched := false
 	switch n := node.(type) {
@@ -773,7 +755,7 @@ func (g *forSpecs) Bind(id string) Goastcher {
 	return g
 }
 
-// ForNames ...
+// ForNames matches all Names of ValueSpec
 func ForNames(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -781,12 +763,10 @@ func ForNames(g Goastcher) Goastcher {
 	return &forNames{ger: g}
 }
 
-// String ...
 func (g *forNames) String() string {
 	return fmt.Sprintf("forNames %s", g.ger)
 }
 
-// Goastch ...
 func (g *forNames) Goastch(ctx *Context, node ast.Node) bool {
 	matched := false
 	switch n := node.(type) {
@@ -811,7 +791,7 @@ func (g *forNames) Bind(id string) Goastcher {
 	return g
 }
 
-// HasValue ...
+// HasValue matches Value node of RangStmt
 func HasValue(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -819,7 +799,6 @@ func HasValue(g Goastcher) Goastcher {
 	return &hasValue{ger: g}
 }
 
-// String ...
 func (g *hasValue) String() string {
 	return fmt.Sprintf("hasValue %s", g.ger)
 }
@@ -846,7 +825,7 @@ func (g *hasValue) Bind(id string) Goastcher {
 	return g
 }
 
-// HasName ...
+// HasName matches Name node of ImportSpec, File, FuncDecl
 func HasName(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -854,7 +833,6 @@ func HasName(g Goastcher) Goastcher {
 	return &hasName{ger: g}
 }
 
-// String ...
 func (g *hasName) String() string {
 	return fmt.Sprintf("hasName %s", g.ger)
 }
@@ -896,7 +874,7 @@ func (f inspector) Visit(node ast.Node) ast.Visitor {
 	return f
 }
 
-// HasDescendant ...
+// HasDescendant matches all descendant AST nodes
 func HasDescendant(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -904,7 +882,6 @@ func HasDescendant(g Goastcher) Goastcher {
 	return &hasDescendant{ger: g}
 }
 
-// Goastch ...
 func (g *hasDescendant) Goastch(ctx *Context, node ast.Node) bool {
 	matched := false
 	ast.Walk(inspector(func(n ast.Node) {
@@ -929,7 +906,7 @@ func (g *hasDescendant) Bind(id string) Goastcher {
 	return g
 }
 
-// Has ...
+// Has matches all child AST nodes
 func Has(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -950,7 +927,6 @@ func (g *has) Bind(id string) Goastcher {
 	return g
 }
 
-// Goastch ...
 func (g *has) Goastch(ctx *Context, node ast.Node) bool {
 	switch n := node.(type) {
 	case *ast.ArrayType:

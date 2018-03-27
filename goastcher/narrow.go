@@ -86,7 +86,7 @@ type (
 	}
 )
 
-// AllOf ...
+// AllOf matches if all given matchers match
 func AllOf(gs ...Goastcher) Goastcher {
 	for _, g := range gs {
 		if isErrorGer(g) {
@@ -96,7 +96,7 @@ func AllOf(gs ...Goastcher) Goastcher {
 	return &allOf{gs: gs}
 }
 
-// AnyOf ...
+// AnyOf matches if any of the given matchers matches
 func AnyOf(gs ...Goastcher) Goastcher {
 	for _, g := range gs {
 		if isErrorGer(g) {
@@ -106,7 +106,7 @@ func AnyOf(gs ...Goastcher) Goastcher {
 	return &anyOf{gs: gs}
 }
 
-// Unless ...
+// Unless matches if the provided matcher does not match
 func Unless(g Goastcher) Goastcher {
 	if isErrorGer(g) {
 		return g
@@ -131,7 +131,6 @@ func (g *unless) Bind(id string) Goastcher {
 	return g
 }
 
-// goastch ...
 func (g *allOf) Goastch(ctx *Context, node ast.Node) bool {
 	for _, g := range g.gs {
 		if !g.Goastch(ctx, node) {
@@ -161,7 +160,6 @@ func (g *allOf) String() string {
 	return buf.String()
 }
 
-// Goastch ...
 func (g *anyOf) Goastch(ctx *Context, node ast.Node) bool {
 	for _, g := range g.gs {
 		if g.Goastch(ctx, node) {
@@ -191,12 +189,11 @@ func (g *anyOf) String() string {
 	return buf.String()
 }
 
-// AsCode ...
+// AsCode matches the code of any node that could formated by format.Node
 func AsCode(code string) Goastcher {
 	return &asCode{code: code}
 }
 
-// goastch ...
 func (g *asCode) Goastch(ctx *Context, node ast.Node) bool {
 	var srcCode bytes.Buffer
 	dstCode, _ := format.Source([]byte(g.code))
@@ -218,7 +215,8 @@ func (g *asCode) String() string {
 	return fmt.Sprintf("asCode {%s}", g.code)
 }
 
-// MatchCode ...
+// MatchCode matches the code-patten of any node that could formated by
+// format.Node
 func MatchCode(patten string) Goastcher {
 	re, err := regexp.CompilePOSIX(patten)
 	if err != nil {
@@ -247,7 +245,7 @@ func (g *matchCode) String() string {
 	return fmt.Sprintf("asCode {%s}", g.code)
 }
 
-// IsSize ...
+// IsSize matches nodes that is the specified size
 func IsSize(size int64) Goastcher {
 	if size < 0 {
 		return ErrorGer(fmt.Errorf("required size greater than 0"))
@@ -280,7 +278,7 @@ func (g *isSize) String() string {
 	return fmt.Sprintf("isSize %d", g.size)
 }
 
-// HasOperator ...
+// HasOperator matches the operator of BinaryExpr, UnaryExpr, AssignStmt
 func HasOperator(op string) Goastcher {
 	return &hasOperator{op: op}
 }
@@ -311,7 +309,7 @@ func (g *hasOperator) String() string {
 	return fmt.Sprintf("hasOperator \"%s\"", g.op)
 }
 
-// Anything ...
+// Anything matches any node
 func Anything() Goastcher {
 	return &anything{}
 }
@@ -333,7 +331,7 @@ func (g *anything) String() string {
 	return "anything"
 }
 
-// IsType ...
+// IsType matches the type of Field, Ident,ValueSpec
 func IsType(typ string) Goastcher {
 	return &isType{typ: typ}
 }
@@ -369,7 +367,7 @@ func (g *isType) String() string {
 	return fmt.Sprintf("isType \"%s\"", g.typ)
 }
 
-// HasPrefix ...
+// HasPrefix matches the prefix of Ident
 func HasPrefix(prefix string) Goastcher {
 	return &hasPrefix{prefix: prefix}
 }
@@ -396,7 +394,7 @@ func (g *hasPrefix) String() string {
 	return fmt.Sprintf("hasPrefix \"%s\"", g.prefix)
 }
 
-// Equals ...
+// Equals matches literals that are equal to the given value
 func Equals(val interface{}) Goastcher {
 	return &equals{val: val}
 }
@@ -447,7 +445,7 @@ func (g *equals) String() string {
 	return fmt.Sprintf("equals \"%v\"", g.val)
 }
 
-// HasSuffix ...
+// HasSuffix matches the suffix of Ident
 func HasSuffix(suffix string) Goastcher {
 	return &hasSuffix{suffix: suffix}
 }
@@ -476,7 +474,7 @@ func (g *hasSuffix) String() string {
 	return fmt.Sprintf("hasSuffix \"%s\"", g.suffix)
 }
 
-// Contains ...
+// Contains matches Ident that contains the given substr
 func Contains(substr string) Goastcher {
 	return &contains{substr: substr}
 }
@@ -505,7 +503,7 @@ func (g *contains) String() string {
 	return fmt.Sprintf("contains \"%s\"", g.substr)
 }
 
-// MatchString ...
+// MatchString matches Ident that match the given patten
 func MatchString(patten string) Goastcher {
 	re, err := regexp.CompilePOSIX(patten)
 	if err != nil {
@@ -538,7 +536,7 @@ func (g *matchString) String() string {
 	return fmt.Sprintf("match \"%s\"", g.re.String())
 }
 
-// IsExported ...
+// IsExported matches Ident that is exported
 func IsExported() Goastcher {
 	return &isExported{}
 }
