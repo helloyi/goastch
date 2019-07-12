@@ -1,3 +1,4 @@
+// goastcher impliments attributive/logical goastcher
 package goastcher
 
 import (

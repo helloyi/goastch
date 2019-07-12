@@ -1,3 +1,4 @@
+// goastcher impliments error goastcher
 package goastcher
 
 import (
