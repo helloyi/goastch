@@ -1,4 +1,6 @@
-// goastcher impliments node goastcher
+// goastcher impliments go ast matcher.
+//
+// This file impliments node goastchers.
 package goastcher
 
 import (

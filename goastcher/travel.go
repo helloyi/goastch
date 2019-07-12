@@ -1,4 +1,6 @@
-// goastcher impliments traversal goastcher
+// goastcher impliments go ast matcher.
+//
+// This file impliments traversal goastchers.
 package goastcher
 
 import (

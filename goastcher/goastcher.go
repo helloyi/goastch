@@ -1,4 +1,4 @@
-// goastcher go ast matcher
+// goastcher impliments go ast matcher.
 package goastcher
 
 import (
