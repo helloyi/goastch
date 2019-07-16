@@ -1,60 +1,14 @@
 #+TITLE: goastch (GO AST matCH)
 
-#+BEGIN_QUOTE
-NOTE:
-开发阶段
-1. 添加新接口
-2. 完善接口功能
-#+END_QUOTE
+* Introduction
+Inspired by [[http://clang.llvm.org/docs/LibASTMatchersReference.html][ast matcher]]. There are four different basic categories of matchers:
++ Node Matchers: Matchers that match a specific type of AST node.
++ Attributive Matchers: Matchers that match attributes on AST nodes.
++ Logical Matchers: Matchers that allow logic between matchers.
++ Traversal Matchers: Matchers that allow traversal between AST nodes.
 
-* 介绍
-  clang 实现了 [[http://clang.llvm.org/docs/LibASTMatchersReference.html][ast matcher]], 其中将匹配器分为
-  节点匹配器，遍历匹配器，以及属性匹配器，是 goastch 实现的主要依据。
-  此方法可以理解为对语法树进行不同方式的遍历，同时进行节点筛选。
-
-** 特性
-   goastch, 可用来匹配任意 go 代码块(语法树)。
-   匹配器主要有四类：
-   + 节点匹配器: 匹配 =go/ast= 中定义的语法节点
-   + 遍历匹配器: 以不同的方式遍历语法节点，用来查找某些节点
-   + 属性匹配器: 匹配节点的属性
-   + 逻辑匹配器: 将以上匹配器逻辑组合，实现更灵活的匹配
-   
-   除此之外还添加一些特殊的匹配器
-   + 错误匹配器: 用来处理匹配器创建过程中的错误
-
-   关于匹配器的实现请看
-   此外 goastch 提供了一个 DSL 用以方便的嵌入 goastch 到某些应用(比如 =govet=)
-
-* 使用
-** ga 解释器
-   ga 用来查找包/源文件中的代码
-
-   ga 解释器演示
-   [[./docs/imgs/ga.gif]]
-
-** 匹配器接口
-   所有匹配器接口都在 ="github.com/helloyi/goastch/goastcher"= 包中实现。
-   此包在保证匹配器可用的前提下，尽量保持最精简/少种类的可导出对象。
-   友好的使用方式是使用点导入，这样链式调用会更加简洁。
- 
-#+CAPTION: 匹配所有点导入语句
-#+BEGIN_SRC go
-ger := File(Has(ImportSpec(HasName(equals("."))).Bind("import")))
-
-matched, err := goastch.Match(ast, info, ger)
-bindings, err := goastch.Find(ast, info, ger)
-#+END_SRC
-
-如上，匹配器从左到右依次匹配，对于任意匹配器其左边的匹配器称为上游匹配器，
-右边的匹配器称为下游匹配器。匹配器以遍历匹配器开始，遍历匹配器是匹配链的驱动者，
-如果起始匹配器不是遍历匹配器，在执行匹配的时候会自动添加 =HasDescendant= 匹配器。
-遍历匹配器，遍历上游匹配器通过的节点，并依次执行下游匹配器。如果给定语法树中包含可以走完匹配链的节点则匹配成功。
-
-匹配成功的节点默认并不会保存，只有使用 =Bind= 方法可将通过此匹配器的节点保存下来。
-并使用 =Find= 函数获取匹配结果。
-
-下面是一个匹配空 Slice 短声明的完整例子
+* Using as a lib
+Find 'ShortVarDecl' from a file, and binding these to 'bindID'.
 #+BEGIN_SRC go
 package main
 
@@ -71,7 +25,7 @@ import (
 )
 
 func main() {
-	g := ShortVarDecl(Has(CompositeLit(IsSize(0)))).Bind("bindID")
+	g := HasDescendant(ShortVarDecl(Anything()).Bind("bindID"))
 
 	src := `package foo
 	func bar() {
@@ -94,165 +48,4 @@ func main() {
 		}
 	}
 }
-#+END_SRC
-
-* 遍历匹配器
-  遍历匹配器(*Traversal Goastcher*), 以特定的方式遍历给定节点。
-  命名约定:
-  + =has*=: 给定节点有某个节点; 对于节点数组，则表示长度为 1 的数组，并传递该节点到下游
-  + =for*=: 遍历给定节点下的对应数组节点，并以此传递给下游
-
-has 匹配器
-
-| 名字          | 描述                  |
-|---------------+-----------------------|
-| HasDescendant | 查询后继节点          |
-| Has           | 查询孩子节点          |
-| HasName       | 查找节点的 =Name= 域  |
-| HasValue      | 查找节点的 =Value= 域 |
-| HasRecvName   | 查找函数的接收器名    |
-| HasRhs        | 查找表达式右边        |
-| HasResults    | 查找节点 =Results= 域 |
-| HasType       | 查找节点 =Type= 域    |
-
-for 匹配器
-
-| 名字      | 说明                   |
-|-----------+------------------------|
-| ForDecls  | 遍历节点的 =Decls= 域  |
-| ForSpecs  | 遍历节点的 =Specs= 域  |
-| ForNames  | 遍历节点的 =Names= 域  |
-| ForFields | 遍历节点的 =Fields= 域 |
-
-* 节点匹配器
-  节点匹配器(*Node Goastcher*), 判断给定节点是否是某类型节点。命名为 =go/ast= 下定义的节点名,
-  除此之外是在 =go/ast= 定义的基础上，做一些属性限制而产生的节点匹配器。
-
-  基本节点匹配器
-
-| 匹配器名       | 说明                                                           |
-|----------------+----------------------------------------------------------------|
-| ArrayType      | 数组类型                                                       |
-| AssignStmt     | 赋值语句                                                       |
-| BadDecl        | 错误声明                                                       |
-| BadExpr        | 错误表达式                                                     |
-| BadStmt        | 错误语句                                                       |
-| BasicLit       | 书面值, 整数, 字符串等基本类型的字面值                         |
-| BinaryExpr     | 二元表达式                                                     |
-| BlockStmt      | '{' '}' 括起的语句列表                                         |
-| BranchStmt     | 分支/跳转语句, goto, break 等改变程序流程的表达式              |
-| CallExpr       | 函数调用表达式                                                 |
-| CaseClause     | switch 的 case 语句块                                             |
-| ChanType       | Channal 类型                                                   |
-| CommClause     | select 的 case 语句块                                            |
-| Comment        | 表示 '//' 或者 '/* */' 形式的注释                              |
-| CommentGroup   | 连续的注释，不包括空行                                         |
-| CompositeLit   | '{' '}' 括起来的表达式列表                                     |
-| DeclStmt       | 声明语句                                                       |
-| DeferStmt      | defer 语句                                                      |
-| Ellipsis       | '...' 参数，或者 '...' 数组长度                                |
-| EmptyStmt      | 空语句，显示或隐式的 ';'                                       |
-| ExprStmt       | 语句列表中独立的表达式                                         |
-| Field          | 结构体，接口的方法列表，函数参数声明，函数返回值声明中的一个域 |
-| FieldList      | 域列表                                                         |
-| File           | 文件                                                           |
-| ForStmt        | for 语句                                                        |
-| FuncDecl       | 函数声明                                                       |
-| FuncLit        | 匿名函数                                                       |
-| FuncType       | 函数类型                                                       |
-| GenDecl        | import，const，type，var 声明                                   |
-| GoStmt         | go 语句                                                         |
-| Ident          | 标识符(变量名)                                                 |
-| IfStmt         | if 语句                                                         |
-| ImportSpec     | 表示一条包导入语句                                             |
-| IncDecStmt     | 自增自减语句                                                   |
-| IndexExpr      | 数组，切片索引表达式 a[1]                                      |
-| InterfaceType  | 接口类型                                                       |
-| KeyValueExpr   | 键值对 key: value                                              |
-| LabeledStmt    | 有标签的语句块                                                 |
-| MapType        | map 类型                                                        |
-| Pkg            | 一个包，包含多个文件                                           |
-| ParenExpr      | '(' ')' 括起来的表达式                                         |
-| RangeStmt      | range 语句                                                      |
-| ReturnStmt     | return 语句                                                     |
-| SelectStmt     | select 语句                                                     |
-| SelectorExpr   | '.' 选择器表达式                                               |
-| SendStmt       | '<-' 语句                                                      |
-| SliceExpr      | 切片表达式                                                     |
-| StarExpr       | '*' 表达式                                                     |
-| StructType     | 结构体类型                                                     |
-| SwitchStmt     | switch 语句                                                     |
-| TypeAssertExpr | 类型断言表达式                                                 |
-| TypeSpec       | 类型声明 type a = b                                            |
-| TypeSwitchStmt | 类型 switch 语句                                                 |
-| UnaryExpr      | 一元表达式                                                     |
-
-基于基本节点匹配器演化出的节点匹配器
-
-| 匹配器名       | 说明                               |
-| ShortVarDecl   | 短变量声明，即使用 ':=' 的赋值语句 |
-| sliceType      | 切片类型                           |
-| intBasicLit    | 整数值                             |
-| floatBasicLit  | 浮点值                             |
-| imagBasicLit   | 实数值                             |
-| charBasicLit   | 字符值                             |
-| stringBasicLit | 字符串值                           |
- 
-* 属性匹配器
-  属性匹配器，匹配节点的属性。
-
-| 属性匹配器  | 描述                               |
-|-------------+------------------------------------|
-| AsCode      | 将节点作为 go 源码匹配             |
-| MatchCode   | 使用正则表达式匹配节点所表示的代码 |
-| IsSize      | 复合节点大小                       |
-| HasOperator | 节点是否有给定操作符               |
-| IsType      | 节点是否是给定类型                 |
-| HasPrefix   | 标识符是否有给定前缀               |
-| HasSuffix   | 标识符是否有给定后缀               |
-| Contains    | 标识符是否包含给定子串             |
-| MatchString | 标识符是否匹配给定正则表达式       |
-| Equals      | 标识符/字面值是否和给定值相同      |
-
-* 逻辑匹配器
-
-| 名字   | 参数             | 描述                                |
-|--------+------------------+-------------------------------------|
-| AllOf  | 一个或多个匹配器 | 给定的所有 goastcher 都满足则匹配成功 |
-| AnyOf  | 一个或多个匹配器 | 只要一个 goastcher 满足则匹配成功     |
-| Unless | 一个匹配器       | 非操作                              |
-
-* DSL
-此 DSL 目标是提供一个全功能的代码匹配语言:
-+ 方便嵌入到其他应用
-+ 方便的查找某些代码块
-+ 对查找结果做特定处理 (比如以简单的方式写 go generate)
-
-需要实现的功能:
-- [X] =goastcher= 匹配表达式
-- [ ] 在指定 go 源码(包路径/文件路径)上执行匹配表达式
-- [ ] 匹配结果处理
-
-目前只实现了匹配表达式。
-#+BEGIN_SRC go
-File(Has(ImportSpec(HasName(equals("."))).Bind("")))
-#+END_SRC
-
-对应如上边的匹配器，转换为匹配表达式为
-#+BEGIN_SRC 
-File has @importSpec hasName equals "."
-#+END_SRC
-
-此 DSL 实现了所有 =goastcher api= 的匹配器，并且不区分大小写。特殊的，
-=@= 符号表示 =Bind= 此匹配器通过的节点。
-
-** 文法定义
-匹配表达式 =goastcher=
-#+BEGIN_SRC ebnf
-ger          = [ '@' ] nodeGer | travelGer | narrowGer | logicGer
-nodeGer      = nodeIdent ger
-travelGer    = travelIdent ger
-narrowGer    = narrowIdent ger
-logicGer     = logicIdent compositeGer
-compositeGer = ger { 'and' ger } [ ',' ]
 #+END_SRC
