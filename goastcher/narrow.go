@@ -1,6 +1,3 @@
-// goastcher impliments go ast matcher.
-//
-// This file impliments attributive/logical goastchers.
 package goastcher
 
 import (
