@@ -7,6 +7,9 @@ Inspired by [[http://clang.llvm.org/docs/LibASTMatchersReference.html][ast match
 + Logical Matchers: Matchers that allow logic between matchers.
 + Traversal Matchers: Matchers that allow traversal between AST nodes.
 
+* Demo of ga toy
+ [[./docs/imgs/ga.gif]]
+
 * Using as a lib
 Find 'ShortVarDecl' from a file, and binding these to 'bindID'.
 #+BEGIN_SRC go
