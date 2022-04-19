@@ -34,7 +34,7 @@ type Pkg struct {
 type Interpreter struct {
 	loader  *loader.Config
 	program *loader.Program
-	writer  *prompt.PosixWriter
+	writer  prompt.ConsoleWriter
 }
 
 var itpt *Interpreter
@@ -42,10 +42,10 @@ var itpt *Interpreter
 func main() {
 	itpt = &Interpreter{
 		loader: &loader.Config{Build: &build.Default},
-		writer: prompt.NewStandardOutputWriter(),
+		writer: prompt.NewStdoutWriter(),
 	}
 
-	p := prompt.New(func(src string) { itpt.exec(src) }, completer)
+	p := prompt.New(func(src string) { itpt.exec(src) }, completer, prompt.OptionPrefix("ga> "))
 	p.Run()
 }
 
